@@ -31,8 +31,8 @@ class DetectorForNSFW:
             "optional": {
                 "model_name": (comfy_paths.get_filename_list("nsfw"), {"default": None}),
                 "alternative_image": ("IMAGE",),
-                "buttocks_exposed": ("FLOAT", {"default": 0.7, "min": 0.0, "max": 1.0, "step": 0.05}),
-                "female_breast_exposed": ("FLOAT", {"default": 0.7, "min": 0.0, "max": 1.0, "step": 0.05}),
+                "buttocks_exposed": ("FLOAT", {"default": 0.85, "min": 0.0, "max": 1.0, "step": 0.05}),
+                "female_breast_exposed": ("FLOAT", {"default": 0.65, "min": 0.0, "max": 1.0, "step": 0.05}),
                 "female_genitalia_exposed": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.05}),
                 "anus_exposed": ("FLOAT", {"default": 0.7, "min": 0.0, "max": 1.0, "step": 0.05}),
                 "male_genitalia_exposed": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.05}),
@@ -101,8 +101,10 @@ class DetectorForNSFW:
             result_info.append(info)
 
         result_tensor = np2tensor(results)
+        if len(result_info) <= 1:
+            result_info = result_info[0]
         result_info = json.dumps(result_info)
-        return (result_tensor, result_info,)
+        return (result_tensor, result_info)
 
     def init_model(self, model_name, detect_size, provider):
         model_path = comfy_paths.get_full_path("nsfw", model_name) if model_name else None
